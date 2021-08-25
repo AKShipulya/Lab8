@@ -1,1 +1,1 @@
-Laboratory work for BSUIR
+Laboratory 8 work for BSUIR
