@@ -51,7 +51,7 @@ bool createPlayer(player* p, int n)
 	int number;
 	double doubleNumber;
 
-	print("Write name of a player: ");
+	print("Укажите имя игрока: ");
 	gets_s(otvet, 79);
 	if (strlen(otvet) == 0)
 		return false;
@@ -59,10 +59,10 @@ bool createPlayer(player* p, int n)
 
 	while (true)
 	{
-		print("Write the team number (1-999) or Enter");
+		print("Укажите номер команды (1-999) или нажмите Enter");
 		gets_s(otvet, 79);
 
-		if (strlen(otvet) == 0)
+		if (strlen(otvet) <= 0 && strlen(otvet) > 999)
 			return false;
 
 		number = atoi(otvet);
@@ -73,34 +73,34 @@ bool createPlayer(player* p, int n)
 		}
 		else
 		{
-			error("team number error");
+			error("Ошибка, номер должен быть от 1 до 999");
 			continue;
 		}
 	}
 
 	while (true)
 	{
-		print("Write age of the player");
+		print("Укажите возраст игрока");
 		gets_s(otvet, 79);
 
-		if (strlen(otvet) == 0)
+		if (strlen(otvet) <= 0 && strlen(otvet) > 99)
 			return false;
 		number = atoi(otvet);
-		if (number >= 0 && number <= 99)
+		if (number > 0 && number <= 99)
 		{
 			player.age = number;
 			break;
 		}
 		else
 		{
-			error("age error");
+			error("Ошибка ввода возраста");
 			continue;
 		}
 	}
 
 	while (true)
 	{
-		print("Write a height of the player");
+		print("Введите рост игрока");
 		gets_s(otvet, 79);
 
 		if (strlen(otvet) == 0)
@@ -112,12 +112,12 @@ bool createPlayer(player* p, int n)
 			break;
 		}
 		else
-			error("height error");
+			error("Ошибка ввода роста");
 	}
 
 	while (true)
 	{
-		print("Write a weight of the player");
+		print("Введите вес игрока");
 		gets_s(otvet, 79);
 
 		if (strlen(otvet) == 0)
@@ -129,7 +129,7 @@ bool createPlayer(player* p, int n)
 			break;
 		}
 		else
-			error("weight error");
+			error("Ошибка ввода веса");
 	}
 
 	p[n] = player;
@@ -138,7 +138,7 @@ bool createPlayer(player* p, int n)
 
 void add(player* p)
 {
-	print("Add player: ");
+	print("Добавить игрока: ");
 	int ins = -1;
 	for (int i = 0; i < MAX; i++)
 	{
@@ -150,12 +150,12 @@ void add(player* p)
 	}
 	if (ins == -1)
 	{
-		error("no place in the list");
+		error("Недостаточно места");
 		return;
 	}
 	if (createPlayer(p, ins))
 	{
-		print("player added");
+		print("Игрок добавлен");
 	}
 }
 
@@ -190,7 +190,7 @@ void printAll(player p[])
 	}
 	if (f1 == false)
 	{
-		error("Empty list");
+		error("Список пуст");
 	}
 }
 
@@ -202,9 +202,63 @@ void clearAll(player* p)
 	}
 }
 
+void taskAge(player p[])
+{
+	char otvet[80];
+	int number;
+
+	int result = 0;
+	int ageSum = 0;
+	int counter = 0;
+	int weightSum = 0;
+	int heightRes = 0;
+	while (true)
+	{
+		print("Введите номер команды или Enter для возврата в главное меню: ");
+		gets_s(otvet, 79);
+		if (strlen(otvet) == 0)
+		{
+			break;
+		}
+		number = atoi(otvet);
+
+		for (int i = 0; i < MAX; i++)
+		{
+			if (number == p[i].teamNo)
+			{
+
+				if (p[i].age >= 0 && p[i].age <= 99)
+				{
+					ageSum += p[i].age;
+					counter++;
+					result = ageSum / counter;
+				}
+				if (p[i].weight >= 0 && p[i].weight <= 300)
+				{
+					weightSum += p[i].weight;
+				}
+				if (p[i].height >= 0 && p[i].height <= 1000)
+				{
+					int max = p[0].height;
+					if (p[i].height > max)
+					{
+						max = p[i].height;
+						heightRes = max;
+					}
+				}
+			}
+		}
+		cout << "----------------------------------------------------------" << endl;
+		cout << "            Выполнение задания, вариант 19: " << endl;
+		cout << "----------------------------------------------------------" << endl;
+		cout << " - Средний возраст игроков: " << result << endl;
+		cout << " - Вес всех игроков команды: " << weightSum << endl;
+		cout << " - Рост самого высокого игрока команды: " << heightRes << endl;
+	}
+}
+
 void main()
 {
-
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 
@@ -217,35 +271,25 @@ void main()
 	while (true)
 	{
 		print(" ");
-		print("  Main menu: ");
-		print("1 - View players");
-		//print("2 - Load from file");
-		//print("3 - Save in file");
-		print("4 - Add player");
-		//print("5 - Remove player");
-		//print("6 - Edit player");
-		//print("7 - Salary of player");
-		print("0 - Exit");
+		print("  Главное меню: ");
+		print("1 - Просмотр игроков");
+		print("2 - Добавить игрока");
+		print("3 - Выполнение задания");
+		print("0 - Выход");
 
 		char otvet[80];
 		gets_s(otvet, 79);
 		switch (otvet[0])
 		{
 		case '1': printAll(list); break;
-		//case '2': load(list);  break;
-		//case '3': save(list);  break;
-		case '4': add(list); break;
-		//case '5': del(list);  break;
-		//case '6': edit(list); break;
-		//case '7': task(list); break;
+		case '2': add(list); break;
+		case '3': taskAge(list); break;
 		case '0': return;
 
-		default: error("Error enter");
+		default: error("Ошибка ввода");
 		}
 	}
-
 	system("pause");
-
 }
 
 
